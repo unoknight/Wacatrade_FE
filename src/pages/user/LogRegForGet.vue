@@ -59,8 +59,14 @@
           <div class="w-full formWapper">
             <div class="mt-0 loginForm login_acc white" v-if="!isG2FA">
               <h2 class="lg:mb-5">{{ $t("Login_Title")}}</h2>
-              <div class="centerx labelx">
-                <div class="mb-3">
+              <div class="centerx labelx mb-3">
+                <vs-radio v-model="loginAccountMode" vs-name="regAccountMode" vs-value="Phone" color="#389a11">Phone Number</vs-radio>
+                 <vs-radio v-model="loginAccountMode" vs-name="regAccountMode" vs-value="Email"  color="#e48346" class="ml-2" >Email</vs-radio>
+                  
+              </div>
+
+              <div class="centerx labelx" >
+                <div class="mb-3" v-if="loginAccountMode=='Email'">
                   <label class="label_custom" for="input-bvxi30l9g"
                     >{{ $t("Login_Email")}}</label
                   >
@@ -71,6 +77,16 @@
                     v-model="email"
                   />
                 </div>
+                  <div class="mb-3"  v-if="loginAccountMode=='Phone'">
+                  <div>
+                    <label class="label_custom" for="input-bvxi30l9g"
+                    >{{ $t("Register_Phone")}}</label
+                  >
+                    <vue-tel-input v-model="phoneLogin" v-bind="vueTel" defaultCountry="KH" mode="international" v-on:country-changed="countryChanged" v-on:validate="phoneRegValidate" ></vue-tel-input>
+                  </div>
+                  
+                </div>
+
                 <div class="relative mb-3">
                   <label class="label_custom" for="input-bvxi30l9g"
                     >{{ $t("Login_Password")}}</label
@@ -1436,6 +1452,7 @@ export default {
       emailForgot: "",
       emailReg: "",
       phoneReg:"",
+      phoneLogin:"",
       emailReset: "",
       email: "",
       email3rd: "",
@@ -1476,6 +1493,7 @@ export default {
       isEmail:true,
       isPhone:false,
       regAccountMode:"Phone",
+      loginAccountMode:"Phone",
       vueTel:{
         dropdownOptions:{
           showSearchBox:true,
@@ -1486,7 +1504,11 @@ export default {
         autoFormat:false,
         invalidMsg:"",
       },
-      selectCountry:null,
+      selectCountry:{
+        dialCode: "",
+        iso2:"",
+        country:"",
+      },
       selectCountryReg:{
         dialCode: "",
         iso2:"",
@@ -1498,12 +1520,22 @@ export default {
   },
   computed: {
     disabledLogin() {
-      if (
-        this.email !== "" &&
-        this.checkReg(this.email) &&
-        this.password !== ""
-      ) {
-        return true;
+
+      if(this.loginAccountMode == "Email"){
+        if (
+          this.email !== "" &&
+          this.checkReg(this.email) &&
+          this.password !== ""
+        ) {
+          return true;
+        }
+      }else{
+         if (
+          this.phoneLogin !== "" &&
+          this.password !== ""
+        ) {
+          return true;
+        }
       }
     },
 
@@ -2087,8 +2119,15 @@ export default {
 
     loginForm() {
       this.ldFrom = true;
+
+      let account = this.email;
+
+      if(this.loginAccountMode == "Phone"){
+        account = this.phoneLogin;
+      }
+
       AuthenticationService.loginUser({
-        email: this.email,
+        email: account,
         password: this.password,
       }).then((res) => {
         this.ldFrom = false;
