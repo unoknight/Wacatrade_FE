@@ -1599,6 +1599,9 @@ export default {
     countryRegChanged(country){
       this.selectCountryReg = country;
     },
+    countryChanged(country){
+      this.selectCountry = country;
+    },
 
     async pasteCode(){
       this.G2FACodeEnter = await navigator.clipboard.readText();
