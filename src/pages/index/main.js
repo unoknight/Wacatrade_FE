@@ -86,6 +86,10 @@ require('../../assets/css/iconfont.css')
 import VeeValidate from 'vee-validate';
 Vue.use(VeeValidate);
 
+import VueTelInput from 'vue-tel-input';
+import 'vue-tel-input/dist/vue-tel-input.css';
+Vue.use(VueTelInput);
+
 Vue.config.productionTip = false
 
 new Vue({

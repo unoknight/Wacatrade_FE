@@ -61,17 +61,28 @@
               <h2 class="mt5m font-24 white font-bold lg:mb-5 mb-3">
                 Đăng nhập vào Tài khoản của bạn
               </h2>
+              <div class="centerx flex">
+                <vs-button
+                    color="#389a11"
+                    class="w-full mb-4 mr-4"
+                    type="filled"
+                    :disabled="isEmail"
+                    @click="loginEmail"
+                    >Email</vs-button>
+                    <vs-button
+                    :disabled="isPhone"
+                    color="#389a11"
+                    class="w-full mb-4 ml-4"
+                    type="filled"
+                    
+                    >Phone</vs-button>
+              </div>
               <div class="centerx labelx">
                 <div class="mb-3">
                   <label class="label_custom" for="input-bvxi30l9g"
                     >Số điện thoại *</label
                   >
-                  <input
-                    type="text"
-                    class="w-full input-bvxi30l9g"
-                    placeholder="Điền số điện thoại"
-                    v-model="email"
-                  />
+                    <vue-tel-input v-model="email" v-bind="vueTel" defaultCountry="KH" mode="international" v-on:country-changed="countryLoginChanged"></vue-tel-input>
                 </div>
                 <div class="mb-3 relative">
                   <label class="label_custom" for="input-bvxi30l9g"
@@ -235,12 +246,8 @@
                   <label class="label_custom" for="input-bvxi30l9g"
                     >Số điện thoại *</label
                   >
-                  <input
-                    type="text"
-                    class="w-full input-bvxi30l9g"
-                    placeholder="Điền số điện thoại"
-                    v-model="emailReg"
-                  />
+                  <vue-tel-input v-model="emailReg" v-bind="vueTel" defaultCountry="KH" mode="international" v-on:country-changed="countryChanged"></vue-tel-input>
+                 
                   <small class="md-error text-danger text-sm">
                     {{ msgEmReg }}
                   </small>
@@ -338,78 +345,6 @@
                 </div>
               </div>
             </div>
-            <div v-if="isSubmitReg">
-              <!-- <h2 class="font-weight-bold mb-5 font-24 colorSecondary">KÍCH HOẠT TÀI KHOẢN</h2> -->
-              <!--<p class="colorSecondary">
-                              Để được kích hoạt tài khoản: <a :href="`mailto:${emailReg}`" class="colorBlue4">{{ emailReg }}</a><br><br>
-                              - B1: Tải ứng dụng Telegram về trên App Store (IOS) hoặc CH Play (Android).<br>
-                              - B2: Nếu đã có ứng dụng (Bỏ qua Bước 1) Nhấp vào nút KÍCH HOẠT bên dưới 👇🏻 để mở App Telegram.<br>
-                              - B3: Nhấp lệnh start (Bắt đầu) và làm theo hướng dẫn.<br>
-                            </p>-->
-              <!-- <p class="colorSecondary">
-                               Một liên kết xác nhận đã được gửi tới
-                                Vui lòng xác nhận email: <a :href="`mailto:${emailReg}`" class="colorBlue4">{{ emailReg }}</a> qua TELEGRAM BOT để kích hoạt tài khoản<a target="_blank" href="https://t.me/ares_idefibo_bot">NHẤP VÀO ĐÂY</a>
-                            </p> -->
-              <!-- <p class="colorSecondary"> -->
-              <!-- Một liên kết xác nhận đã được gửi tới <a :href="`mailto:${emailReg}`" class="colorBlue4">{{ emailReg }}</a>
-                                Vui lòng chờ ít phút để nhận liên kết xác nhận và kích hoạt tài khoản của bạn.<br> -->
-              <!-- Nếu không nhận được email xin vui lòng dùng TELEGRAM BOT để kích hoạt tài khoản: <a target="_blank" href="https://t.me/ares_idefibo_bot">Nhấp vào đây</a>-->
-              <!-- </p> -->
-
-              <!-- <p> -->
-              <!-- <button class="btn btn-resendemail w-full mt-4" @click="openSite">NHẤP VÀO ĐÂY 🤝KÍCH HOẠT🤝</button> -->
-              <!-- <button id="button-with-loading" class="btn btn-resendemail w-full mt-4 vs-con-loading__container" :disabled="disSendMail"  @click="reSendMail">{{ ssDownSend }}</button>  -->
-              <!-- </p> -->
-
-              <div class="mb-5 relative wrapper-phone-code">
-                <div>
-                  <label class="label_custom" for="input-bvxi30l9g"
-                    >Mã xác thực OTP *</label
-                  >
-                  <input
-                    type="email"
-                    class="w-full input-bvxi30l9g"
-                    placeholder="Điền Mã xác thực OTP"
-                    v-model="optCode"
-                  />
-                </div>
-                <vs-button
-                  style="
-                    background: #389a11 !important;
-                    color: #fff !important;
-                    white-space: nowrap;
-                    height: 45px;
-                  "
-                  v-if="!disSendMail"
-                  @click="sendOtp"
-                  >Lấy mã OTP</vs-button
-                >
-                <vs-button
-                  v-else
-                  :disabled="ssDownSend.includes('s')"
-                  @click="sendOtp"
-                  style="height: 45px"
-                  >{{ ssDownSend }}</vs-button
-                >
-              </div>
-
-              <vs-alert v-if="msgOptReg" color="warning" class="mb-5">
-                {{ msgOptReg }}
-              </vs-alert>
-              <div>
-                <vs-button
-                  style="background: #389a11 !important; color: #fff !important"
-                  :disabled="optCode.length === 0"
-                  class="w-full"
-                  type="filled"
-                  @click="verifyOtp"
-                  >Đăng ký</vs-button
-                >
-              </div>
-
-              <p class="colorSecondary"></p>
-            </div>
-            <div id="recaptcha-container"></div>
           </div>
           <div slot="footer">
             <p class="colorGray bottomText mb-2">
@@ -422,130 +357,7 @@
         </div>
       </div>
     </div>
-    <div
-      class="boxAuthentication"
-      :class="{ show: activeSlide }"
-      v-if="activeResendVerifyEmail"
-    >
-      <div
-        class="contentAuthentication bgPrimary flex flex-col items-center justify-between"
-        :class="{ 'ld-loading': ldFrom }"
-      >
-        <div class="loading">
-          <div class="loading__ring">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              xmlns:xlink="http://www.w3.org/1999/xlink"
-              version="1.1"
-              x="0px"
-              y="0px"
-              viewBox="0 0 100 100"
-              style="enable-background: new 0 0 100 100"
-              xml:space="preserve"
-            >
-              <path
-                d="M85.5,42c-0.2-0.8-0.5-1.7-0.8-2.5c-0.3-0.9-0.7-1.6-1-2.3c-0.3-0.7-0.6-1.3-1-1.9c0.3,0.5,0.5,1.1,0.8,1.7  c0.2,0.7,0.6,1.5,0.8,2.3s0.5,1.7,0.8,2.5c0.8,3.5,1.3,7.5,0.8,12c-0.4,4.3-1.8,9-4.2,13.4c-2.4,4.2-5.9,8.2-10.5,11.2  c-1.1,0.7-2.2,1.5-3.4,2c-0.5,0.2-1.2,0.6-1.8,0.8s-1.3,0.5-1.9,0.8c-2.6,1-5.3,1.7-8.1,1.8l-1.1,0.1L53.8,84c-0.7,0-1.4,0-2.1,0  c-1.4-0.1-2.9-0.1-4.2-0.5c-1.4-0.1-2.8-0.6-4.1-0.8c-1.4-0.5-2.7-0.9-3.9-1.5c-1.2-0.6-2.4-1.2-3.7-1.9c-0.6-0.3-1.2-0.7-1.7-1.1  l-0.8-0.6c-0.3-0.1-0.6-0.4-0.8-0.6l-0.8-0.6L31.3,76l-0.2-0.2L31,75.7l-0.1-0.1l0,0l-1.5-1.5c-1.2-1-1.9-2.1-2.7-3.1  c-0.4-0.4-0.7-1.1-1.1-1.7l-1.1-1.7c-0.3-0.6-0.6-1.2-0.9-1.8c-0.2-0.5-0.6-1.2-0.8-1.8c-0.4-1.2-1-2.4-1.2-3.7  c-0.2-0.6-0.4-1.2-0.5-1.9c-0.1-0.6-0.2-1.2-0.3-1.8c-0.3-1.2-0.3-2.4-0.4-3.7c-0.1-1.2,0-2.5,0.1-3.7c0.2-1.2,0.3-2.4,0.6-3.5  c0.1-0.6,0.3-1.1,0.4-1.7l0.1-0.8l0.3-0.8c1.5-4.3,3.8-8,6.5-11c0.8-0.8,1.4-1.5,2.1-2.1c0.9-0.9,1.4-1.3,2.2-1.8  c1.4-1.2,2.9-2,4.3-2.8c2.8-1.5,5.5-2.3,7.7-2.8s4-0.7,5.2-0.6c0.6-0.1,1.1,0,1.4,0s0.4,0,0.4,0h0.1c2.7,0.1,5-2.2,5-5  c0.1-2.7-2.2-5-5-5c-0.2,0-0.2,0-0.3,0c0,0-0.2,0.1-0.6,0.1c-0.4,0-1,0-1.8,0.1c-1.6,0.1-4,0.4-6.9,1.2c-2.9,0.8-6.4,2-9.9,4.1  c-1.8,1-3.6,2.3-5.4,3.8C26,21.4,25,22.2,24.4,23c-0.2,0.2-0.4,0.4-0.6,0.6c-0.2,0.2-0.5,0.4-0.6,0.7c-0.5,0.4-0.8,0.9-1.3,1.4  c-3.2,3.9-5.9,8.8-7.5,14.3l-0.3,1l-0.2,1.1c-0.1,0.7-0.3,1.4-0.4,2.1c-0.3,1.5-0.4,2.9-0.5,4.5c0,1.5-0.1,3,0.1,4.5  c0.2,1.5,0.2,3,0.6,4.6c0.1,0.7,0.3,1.5,0.4,2.3c0.2,0.8,0.5,1.5,0.7,2.3c0.4,1.6,1.1,3,1.7,4.4c0.3,0.7,0.7,1.4,1.1,2.1  c0.4,0.8,0.8,1.4,1.2,2.1c0.5,0.7,0.9,1.4,1.4,2s0.9,1.3,1.5,1.9c1.1,1.3,2.2,2.7,3.3,3.5l1.7,1.6c0,0,0.1,0.1,0.1,0.1c0,0,0,0,0,0  c0,0,0,0,0,0l0.1,0.1l0.1,0.1h0.2l0.5,0.4l1,0.7c0.4,0.2,0.6,0.5,1,0.7l1.1,0.6c0.8,0.4,1.4,0.9,2.1,1.2c1.4,0.7,2.9,1.5,4.4,2  c1.5,0.7,3.1,1,4.6,1.5c1.5,0.3,3.1,0.7,4.7,0.8c1.6,0.2,3.1,0.2,4.7,0.2c0.8,0,1.6-0.1,2.4-0.1l1.2-0.1l1.1-0.1  c3.1-0.4,6.1-1.3,8.9-2.4c0.8-0.3,1.4-0.6,2.1-0.9s1.3-0.7,2-1.1c1.3-0.7,2.6-1.7,3.7-2.5c0.5-0.4,1-0.9,1.6-1.3l0.8-0.6l0.2-0.2  c0,0,0.1-0.1,0.1-0.1c0.1-0.1,0,0,0,0v0.1l0.1-0.1l0.4-0.4c0.5-0.5,1-1,1.5-1.5c0.3-0.3,0.5-0.5,0.8-0.8l0.7-0.8  c0.9-1.1,1.8-2.2,2.5-3.3c0.4-0.6,0.7-1.1,1.1-1.7c0.3-0.7,0.6-1.2,0.9-1.8c2.4-4.9,3.5-9.8,3.7-14.4C87.3,49.7,86.6,45.5,85.5,42z"
-              ></path>
-            </svg>
-          </div>
-          <div class="loading__ring">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              xmlns:xlink="http://www.w3.org/1999/xlink"
-              version="1.1"
-              x="0px"
-              y="0px"
-              viewBox="0 0 100 100"
-              style="enable-background: new 0 0 100 100"
-              xml:space="preserve"
-            >
-              <path
-                d="M85.5,42c-0.2-0.8-0.5-1.7-0.8-2.5c-0.3-0.9-0.7-1.6-1-2.3c-0.3-0.7-0.6-1.3-1-1.9c0.3,0.5,0.5,1.1,0.8,1.7  c0.2,0.7,0.6,1.5,0.8,2.3s0.5,1.7,0.8,2.5c0.8,3.5,1.3,7.5,0.8,12c-0.4,4.3-1.8,9-4.2,13.4c-2.4,4.2-5.9,8.2-10.5,11.2  c-1.1,0.7-2.2,1.5-3.4,2c-0.5,0.2-1.2,0.6-1.8,0.8s-1.3,0.5-1.9,0.8c-2.6,1-5.3,1.7-8.1,1.8l-1.1,0.1L53.8,84c-0.7,0-1.4,0-2.1,0  c-1.4-0.1-2.9-0.1-4.2-0.5c-1.4-0.1-2.8-0.6-4.1-0.8c-1.4-0.5-2.7-0.9-3.9-1.5c-1.2-0.6-2.4-1.2-3.7-1.9c-0.6-0.3-1.2-0.7-1.7-1.1  l-0.8-0.6c-0.3-0.1-0.6-0.4-0.8-0.6l-0.8-0.6L31.3,76l-0.2-0.2L31,75.7l-0.1-0.1l0,0l-1.5-1.5c-1.2-1-1.9-2.1-2.7-3.1  c-0.4-0.4-0.7-1.1-1.1-1.7l-1.1-1.7c-0.3-0.6-0.6-1.2-0.9-1.8c-0.2-0.5-0.6-1.2-0.8-1.8c-0.4-1.2-1-2.4-1.2-3.7  c-0.2-0.6-0.4-1.2-0.5-1.9c-0.1-0.6-0.2-1.2-0.3-1.8c-0.3-1.2-0.3-2.4-0.4-3.7c-0.1-1.2,0-2.5,0.1-3.7c0.2-1.2,0.3-2.4,0.6-3.5  c0.1-0.6,0.3-1.1,0.4-1.7l0.1-0.8l0.3-0.8c1.5-4.3,3.8-8,6.5-11c0.8-0.8,1.4-1.5,2.1-2.1c0.9-0.9,1.4-1.3,2.2-1.8  c1.4-1.2,2.9-2,4.3-2.8c2.8-1.5,5.5-2.3,7.7-2.8s4-0.7,5.2-0.6c0.6-0.1,1.1,0,1.4,0s0.4,0,0.4,0h0.1c2.7,0.1,5-2.2,5-5  c0.1-2.7-2.2-5-5-5c-0.2,0-0.2,0-0.3,0c0,0-0.2,0.1-0.6,0.1c-0.4,0-1,0-1.8,0.1c-1.6,0.1-4,0.4-6.9,1.2c-2.9,0.8-6.4,2-9.9,4.1  c-1.8,1-3.6,2.3-5.4,3.8C26,21.4,25,22.2,24.4,23c-0.2,0.2-0.4,0.4-0.6,0.6c-0.2,0.2-0.5,0.4-0.6,0.7c-0.5,0.4-0.8,0.9-1.3,1.4  c-3.2,3.9-5.9,8.8-7.5,14.3l-0.3,1l-0.2,1.1c-0.1,0.7-0.3,1.4-0.4,2.1c-0.3,1.5-0.4,2.9-0.5,4.5c0,1.5-0.1,3,0.1,4.5  c0.2,1.5,0.2,3,0.6,4.6c0.1,0.7,0.3,1.5,0.4,2.3c0.2,0.8,0.5,1.5,0.7,2.3c0.4,1.6,1.1,3,1.7,4.4c0.3,0.7,0.7,1.4,1.1,2.1  c0.4,0.8,0.8,1.4,1.2,2.1c0.5,0.7,0.9,1.4,1.4,2s0.9,1.3,1.5,1.9c1.1,1.3,2.2,2.7,3.3,3.5l1.7,1.6c0,0,0.1,0.1,0.1,0.1c0,0,0,0,0,0  c0,0,0,0,0,0l0.1,0.1l0.1,0.1h0.2l0.5,0.4l1,0.7c0.4,0.2,0.6,0.5,1,0.7l1.1,0.6c0.8,0.4,1.4,0.9,2.1,1.2c1.4,0.7,2.9,1.5,4.4,2  c1.5,0.7,3.1,1,4.6,1.5c1.5,0.3,3.1,0.7,4.7,0.8c1.6,0.2,3.1,0.2,4.7,0.2c0.8,0,1.6-0.1,2.4-0.1l1.2-0.1l1.1-0.1  c3.1-0.4,6.1-1.3,8.9-2.4c0.8-0.3,1.4-0.6,2.1-0.9s1.3-0.7,2-1.1c1.3-0.7,2.6-1.7,3.7-2.5c0.5-0.4,1-0.9,1.6-1.3l0.8-0.6l0.2-0.2  c0,0,0.1-0.1,0.1-0.1c0.1-0.1,0,0,0,0v0.1l0.1-0.1l0.4-0.4c0.5-0.5,1-1,1.5-1.5c0.3-0.3,0.5-0.5,0.8-0.8l0.7-0.8  c0.9-1.1,1.8-2.2,2.5-3.3c0.4-0.6,0.7-1.1,1.1-1.7c0.3-0.7,0.6-1.2,0.9-1.8c2.4-4.9,3.5-9.8,3.7-14.4C87.3,49.7,86.6,45.5,85.5,42z"
-              ></path>
-            </svg>
-          </div>
-        </div>
-        <div
-          class="header-sidebar p-10 fixed flex items-center justify-between flex-col w-full"
-        >
-          <div class="header w-full">
-            <a href="/" class="logoLogin mb-0 router-link-active">BoTrade</a>
-            <div class="close-page">
-              <feather-icon
-                icon="XIcon"
-                @click="
-                  (activeResendVerifyEmail = !activeResendVerifyEmail),
-                    redirectHome()
-                "
-                class="cursor-pointer"
-              />
-            </div>
-          </div>
-          <div class="formWapper w-full">
-            <div
-              class="ResendForm white mt-0"
-              :class="{ block: hideTbResend, hidden: !hideTbResend }"
-            >
-              <h2 class="mt5m font-24 white font-bold lg:mb-5 mb-5">
-                Gửi lại email xác nhận
-              </h2>
-              <p class="color-white-50 mb-3">
-                Vui lòng nhập địa chỉ email của bạn để gửi lại email xác nhận.
-              </p>
-              <div class="centerx labelx">
-                <div
-                  class="mb-5 relative"
-                  :class="{ 'md-invalid': msgEmailResend != '' }"
-                >
-                  <vs-input
-                    type="email"
-                    class="w-full"
-                    label="Địa chỉ Email"
-                    placeholder="Điền Email"
-                    v-model="emailResend"
-                  />
-                  <small class="md-error text-danger text-sm">
-                    {{ msgEmailResend }}
-                  </small>
-                </div>
-
-                <div>
-                  <vs-button
-                    style="
-                      background: #389a11 !important;
-                      color: #fff !important;
-                    "
-                    class="w-full"
-                    type="filled"
-                    @click="submitFormResendActive"
-                    >Gửi lại</vs-button
-                  >
-                </div>
-              </div>
-            </div>
-            <div :class="{ hidden: hideTbResend, block: !hideTbResend }">
-              <h2 class="font-bold mb-5 white titleHeader">
-                Đã gửi email xác nhận!
-              </h2>
-              <p class="white">
-                Một liên kết xác nhận đã được gửi tới email đăng ký của bạn.
-              </p>
-              <!--<p class="white">
-                                Nếu không nhận được email xin vui lòng dùng TELEGRAM BOT để kích hoạt tài khoản: <a target="_blank" href="https://t.me/ares_idefibo_bot">Nhấp vào đây</a>
-                            </p> -->
-            </div>
-          </div>
-          <div slot="footer">
-            <p class="color-white-50">
-              Đã có tài khoản?
-              <router-link to="/login" class="cursor-pointer">
-                Đăng nhập vào Tài khoản của bạn.</router-link
-              >
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
+    
     <div
       class="boxAuthentication"
       :class="{ show: activeSlide }"
@@ -933,13 +745,26 @@ export default {
       saveToken: "",
       G2FACodeEnter: "",
       colorLoading: "#fff",
+      isEmail:false,
+      isPhone:true,
+      vueTel:{
+        dropdownOptions:{
+          showSearchBox:true,
+          showDialCodeInSelection:true,
+          showFlags:true,
+          showDialCodeInList:true,
+
+        },
+        autoFormat:false
+      },
+      selectCountry:null,
+      selectCountryLogin:null
     };
   },
   computed: {
     disabledLogin() {
       if (
         this.email !== "" &&
-        this.checkSdt(this.email) &&
         this.password !== ""
       ) {
         return true;
@@ -1000,6 +825,12 @@ export default {
     },
   },
   methods: {
+    countryChanged(country){
+      this.selectCountry = country;
+    },
+    countryLoginChanged(country){
+      this.selectCountryLogin = country;
+    },
     sendOtp() {
       const self = this;
       let countryCode = "+84";
@@ -1021,6 +852,10 @@ export default {
           }, 1500);
         });
     },
+    loginEmail(){
+      localStorage.setItem("loginType", "email");
+      location.reload();
+    },
     //
     verifyOtp() {
       const self = this;
@@ -1036,7 +871,7 @@ export default {
             upline_id: self.codeRef,
             isOpt: true,
           };
-
+          
           //
           AuthenticationService.registerUser(obj).then((res) => {
             self.ldFrom = false;
@@ -1258,7 +1093,8 @@ export default {
     },
 
     submitFormReg() {
-      if (this.emailReg === "" || !this.checkSdt(this.emailReg)) {
+
+      if (this.emailReg === "") {
         this.msgEmReg = "Số điện thoại không hợp lệ. Vui lòng thử lại.";
         return;
       } else {
@@ -1290,55 +1126,59 @@ export default {
       } else {
         this.msgNickName = "";
       }
-      this.isSubmitReg = true;
+      //this.isSubmitReg = true;
 
-      // let isActive = true;
+      let isActive = true;
 
-      // if(isActive){
-      //     this.ldFrom = true
+      if(isActive){
+          this.ldFrom = true
 
-      //     let obj = {
-      //         email: this.emailReg,
-      //         password: this.passwordReg,
-      //         nick_name: this.nickName,
-      //         upline_id: this.codeRef
-      //     }
+          let obj = {
+              email: this.emailReg,
+              password: this.passwordReg,
+              nick_name: this.nickName,
+              upline_id: this.codeRef,
+              isOpt: true,
+              isPhone: true,
+              dialCode:this.selectCountry.dialCode,
+              iso2: this.selectCountry.iso2,
+              country: this.selectCountry.country
+          }
 
-      //     //
-      //     AuthenticationService.registerUser(obj)
-      //     .then((res) => {
-      //         this.ldFrom = false
-      //         if(res.data.success == 1){
-      //           this.isSubmitReg = true
-      //           setTimeout(() => {
-      //               this.countDownResendMail();
-      //           }, 500);
+          //
+          AuthenticationService.registerUser(obj)
+          .then((res) => {
+              this.ldFrom = false
+              if(res.data.success == 1){
+                
+                this.$vs.notify({
+                    title: 'Đăng ký thành công',
+                    text: 'Chúng tôi đã gửi 1 một liên kết kích hoạt đến tài khoản của bạn.',
+                    iconPack: 'feather',
+                    icon: 'icon-check',
+                    color: 'success'
+                });
 
-      //           this.$vs.notify({
-      //               title: 'Đăng ký thành công',
-      //               text: 'Chúng tôi đã gửi 1 một liên kết kích hoạt đến tài khoản của bạn.',
-      //               iconPack: 'feather',
-      //               icon: 'icon-check',
-      //               color: 'success'
-      //           });
-      //         }else if(res.data.success == 2){
-      //           this.$vs.notify({
-      //               text: 'Email này đã tồn tại',
-      //               iconPack: 'feather',
-      //               icon: 'icon-alert-circle',
-      //               color: 'warning'
-      //           });
-      //         }else if(res.data.success == 3){
-      //           this.$vs.notify({
-      //               text: 'Biệt danh này đã tồn tại',
-      //               iconPack: 'feather',
-      //               icon: 'icon-alert-circle',
-      //               color: 'warning'
-      //           });
-      //         }
+                this.$router.push("/login").catch(() => {});
 
-      //     })
-      // }
+              }else if(res.data.success == 2){
+                this.$vs.notify({
+                    text: 'Email này đã tồn tại',
+                    iconPack: 'feather',
+                    icon: 'icon-alert-circle',
+                    color: 'warning'
+                });
+              }else if(res.data.success == 3){
+                this.$vs.notify({
+                    text: 'Biệt danh này đã tồn tại',
+                    iconPack: 'feather',
+                    icon: 'icon-alert-circle',
+                    color: 'warning'
+                });
+              }
+
+          })
+      }
     },
 
     submitFormForgot() {
@@ -1423,7 +1263,7 @@ export default {
           getData.blLive = dt.order[1].balance;
           getData.blDemo = (dt.order[0] || {}).balance || 0;
           getData.balance = dt.balance;
-
+ getData.is_phone = dt.is_phone;
           localStorage.setItem("INFO", JSON.stringify(dt));
           //localStorage.removeItem('isLog')
 
@@ -1437,6 +1277,7 @@ export default {
       AuthenticationService.loginUser({
         email: this.email,
         password: this.password,
+        dialCode: this.selectCountryLogin.dialCode,
       }).then((res) => {
         this.ldFrom = false;
         let g = res.data;
@@ -1536,7 +1377,7 @@ export default {
     },
   },
   created() {
-    this.initReCaptcha();
+    //this.initReCaptcha();
     let path = this.$router.currentRoute.path;
 
     if (path == "/login") {
@@ -1766,5 +1607,46 @@ a {
 
 .pagle .vs-sidebar {
   max-width: 428px !important;
+}
+
+.vti__dropdown-list{
+  width: 330px !important;
+}
+
+.vti__dropdown-item strong,.vti__dropdown-item span{
+  color: #222;
+}
+
+.vti__dropdown-item>span{
+      position: absolute;
+    right: 10px;
+}
+
+.vue-tel-input{
+  border-radius: 8px;
+  height: 43px;
+  margin-top: 7px;
+  border: 1px solid #42476b !important
+}
+
+.vti__selection .vti__country-code{ 
+  color:white;
+}
+
+.vti__dropdown-arrow{
+  color:white;
+}
+
+.vti__dropdown:hover{
+  background: transparent;
+}
+ .vti__dropdown.disabled, .vti__dropdown.open{
+  background: transparent;
+ }
+.vti__dropdown-list.below{
+  top : 43px;
+  border-radius: 5px;
+  border-top-left-radius: 0;
+
 }
 </style>

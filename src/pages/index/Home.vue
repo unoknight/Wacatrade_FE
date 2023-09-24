@@ -224,7 +224,8 @@
         </div>
       </div>
     </section>
-    <log-reg-for-get />
+    <log-reg-for-get v-if="isEmail" />
+    <log-reg-for-get-sdt v-if="isPhone" />
   </div>
 </template>
 
@@ -1633,6 +1634,7 @@
 import "swiper/dist/css/swiper.min.css";
 import { swiper, swiperSlide } from "vue-awesome-swiper";
 import config from "@/config.json";
+import LogRegForGetSdt from "@/pages/user/LogRegForGet_sdt";
 import LogRegForGet from "@/pages/user/LogRegForGet";
 import I18n from "./i18n";
 
@@ -1694,6 +1696,8 @@ export default {
       },
       domain: config.domainRealName,
       mail: config.support.mail,
+      isEmail:false,
+      isPhone:true
     };
   },
   methods: {
@@ -1715,6 +1719,7 @@ export default {
   components: {
     swiper,
     swiperSlide,
+    LogRegForGetSdt,
     LogRegForGet,
     I18n,
   },
@@ -1724,6 +1729,20 @@ export default {
       background: "#111",
       color: "#ffffff",
     });
+
+    let loginType = localStorage.getItem("loginType");
+
+    if(!loginType){
+      localStorage.setItem("loginType","email");
+    }else{
+      if(loginType=="email"){
+        this.isEmail = true;
+        this.isPhone = false;
+      }else if(loginType == "phone"){
+        this.isEmail = false;
+        this.isPhone = true;
+      }
+    }
   },
   created() {
     window.addEventListener("load", this.onWindowLoad);

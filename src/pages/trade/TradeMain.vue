@@ -289,6 +289,7 @@ export default {
             getData.blLive = dt.order[1].balance;
             getData.blDemo = dt.order[0].balance;
             getData.balance = dt.balance;
+            getData.is_phone = dt.is_phone;
 
             localStorage.setItem("INFO", JSON.stringify(dt));
             //localStorage.removeItem('isLog')
@@ -436,7 +437,7 @@ export default {
             getData.blLive = dt.order[1].balance;
             getData.blDemo = dt.order[0].balance;
             getData.balance = dt.balance;
-
+            getData.is_phone = dt.is_phone;
             localStorage.setItem("INFO", JSON.stringify(dt));
             //localStorage.removeItem('isLog')
           } 

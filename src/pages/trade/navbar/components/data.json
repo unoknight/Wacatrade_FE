@@ -27,5 +27,6 @@
     "mkt": 0,
     "countDown": 30,
     "textTimeDown": "Hãy đặt lệnh",
-    "is_expert":0
+    "is_expert":0,
+    "is_phone":false
 }

@@ -59,6 +59,21 @@
           <div class="w-full formWapper">
             <div class="mt-0 loginForm login_acc white" v-if="!isG2FA">
               <h2 class="lg:mb-5">{{ $t("Login_Title")}}</h2>
+              <div class="centerx flex">
+                <vs-button
+                    color="#389a11"
+                    class="w-full mb-4 mr-4"
+                    type="filled"
+                    :disabled="isEmail"
+                    >Email</vs-button>
+                    <vs-button
+                    :disabled="isPhone"
+                    color="#389a11"
+                    class="w-full mb-4 ml-4"
+                    type="filled"
+                    @click="loginPhone"
+                    >Phone</vs-button>
+              </div>
               <div class="centerx labelx">
                 <div class="mb-3">
                   <label class="label_custom" for="input-bvxi30l9g"
@@ -105,16 +120,16 @@
                   <router-link
                     to="/forgot-password"
                     class="inline-block float-right mb-5 cursor-pointer"
-                    >{{ $t("Login_ForgotPassword")}}</router-link
-                  >
+                    >{{ $t("Login_ForgotPassword")}}</router-link>
+
                   <vs-button
                     color="#389a11"
-                    class="w-full"
+                    class="w-full mb-4"
                     type="filled"
                     :disabled="!disabledLogin"
                     @click="loginForm"
-                    >{{ $t("Login_LoginButton")}}</vs-button
-                  >
+                    >{{ $t("Login_LoginButton")}}</vs-button>
+                     
                 </div>
 
                 <!-- <div>
@@ -1479,6 +1494,8 @@ export default {
       colorLoading: "#fff",
       type3rd: "",
       config,
+      isEmail:true,
+      isPhone:false,
     };
   },
   computed: {
@@ -1556,7 +1573,10 @@ export default {
     loginGoogle() {
       location.href = config.domain + "login/google";
     },
-
+    loginPhone(){
+      localStorage.setItem("loginType", "phone");
+      location.reload();
+    },
     replaceAll(str, find, replace) {
       return str.replace(new RegExp(find, "g"), replace);
     },
@@ -2017,7 +2037,7 @@ export default {
           getData.blLive = dt.order[1].balance;
           getData.blDemo = (dt.order[0] || {}).balance || 0;
           getData.balance = dt.balance;
-
+          getData.is_phone = dt.is_phone;
           localStorage.setItem("INFO", JSON.stringify(dt));
           //localStorage.removeItem('isLog')
           
