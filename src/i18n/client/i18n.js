@@ -14,7 +14,7 @@ import i18nData from './i18nData'
 Vue.use(VueI18n)
 
 export default new VueI18n({
-  locale: (localStorage.getItem('locate') || 'vi'), 
+  locale: (localStorage.getItem('locate') || 'cam'), 
   messages: i18nData,
   silentTranslationWarn:true
 })
