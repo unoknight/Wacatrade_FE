@@ -59,21 +59,6 @@
           <div class="w-full formWapper">
             <div class="mt-0 loginForm login_acc white" v-if="!isG2FA">
               <h2 class="lg:mb-5">{{ $t("Login_Title")}}</h2>
-              <div class="centerx flex">
-                <vs-button
-                    color="#389a11"
-                    class="w-full mb-4 mr-4"
-                    type="filled"
-                    :disabled="isEmail"
-                    >Email</vs-button>
-                    <vs-button
-                    :disabled="isPhone"
-                    color="#389a11"
-                    class="w-full mb-4 ml-4"
-                    type="filled"
-                    @click="loginPhone"
-                    >Phone</vs-button>
-              </div>
               <div class="centerx labelx">
                 <div class="mb-3">
                   <label class="label_custom" for="input-bvxi30l9g"
@@ -569,21 +554,7 @@
                     v-model="codeRef"
                   />
                 </div>
-                <div
-                  class="relative mb-5"
-                  :class="{ 'mt-10': msgNickName != '' }"
-                >
-                  <label class="label_custom" for="input-bvxi30l9g"
-                    >{{ $t("Register_referralCode_Lucky")}}</label
-                  >
-                  <input
-                    readonly
-                    type="email"
-                    class="w-full input-bvxi30l9g"
-                    :placeholder="this.$t('Register_ReferalCodePlaceholder')"
-                    v-model="codeRefLucky"
-                  />
-                </div>
+                
                 <div>
                   <vs-button
                     style="
@@ -704,10 +675,17 @@
               >
               {{ $t("Register_Title")}} {{ config.domainRealName }}
               </h2>
+              <div class="centerx labelx mb-3">
+                <vs-radio v-model="regAccountMode" vs-name="regAccountMode" vs-value="Phone" color="#389a11">Phone Number</vs-radio>
+                 <vs-radio v-model="regAccountMode" vs-name="regAccountMode" vs-value="Email"  color="#e48346" class="ml-2" >Email</vs-radio>
+                  
+              </div>
+
               <div class="centerx labelx">
                 <div
                   class="relative mb-5"
                   :class="{ 'md-invalid': msgEmReg != '' }"
+                  v-if="regAccountMode=='Email'"
                 >
                   <label class="label_custom" for="input-bvxi30l9g"
                     >{{ $t("Register_Email")}}</label
@@ -718,8 +696,20 @@
                     :placeholder=" this.$t('Register_EmailPlaceholder')"
                     v-model="emailReg"
                   />
-                  <small class="text-sm md-error text-danger">
+                  <small class="text-sm md-error text-danger" v-if="msgEmReg != ''">
                     {{ msgEmReg }}
+                  </small>
+                </div>
+                 <div class="mb-3"  v-if="regAccountMode=='Phone'">
+                  <div>
+                    <label class="label_custom" for="input-bvxi30l9g"
+                    >{{ $t("Register_Phone")}}</label
+                  >
+                    <vue-tel-input v-model="phoneReg" v-bind="vueTel" defaultCountry="KH" mode="international" v-on:country-changed="countryRegChanged" v-on:validate="phoneRegValidate" ></vue-tel-input>
+                  </div>
+                  
+                  <small class="text-sm md-error text-danger" v-if="msgPhoneReg != ''">
+                    {{ msgPhoneReg }}
                   </small>
                 </div>
                 <div
@@ -756,12 +746,13 @@
                     "
                     class="cursor-pointer viewPass"
                   />
-                  <small class="text-sm md-error text-danger">
-                    {{ msgPassReg }}
-                  </small>
                   <span class="float-right text-xs italic md-count"
                     >{{ countPassReg }} / 20</span
                   >
+                  <small class="text-sm md-error text-danger"  v-if="msgPassReg != ''">
+                    {{ msgPassReg }}
+                  </small>
+                  
                 </div>
 
                 <div
@@ -779,13 +770,12 @@
                     v-validate="'required|min:3|max:20|alpha_dash'"
                     maxlength="20"
                   />
-
-                  <small class="text-sm md-error text-danger">
-                    {{ msgNickName }}
-                  </small>
                   <span class="float-right text-xs italic md-count"
                     >{{ countNickNameReg }} / 20</span
                   >
+                  <small class="text-sm md-error text-danger" v-if="msgNickName != ''">
+                    {{ msgNickName }}
+                  </small>
                 </div>
 
                 <div
@@ -802,20 +792,7 @@
                     v-model="codeRef"
                   />
                 </div>
-                <div
-                  class="relative mb-5"
-                  :class="{ 'mt-10': msgNickName != '' }"
-                >
-                  <label class="label_custom" for="input-bvxi30l9g"
-                    >{{ $t("Register_referralCode_Lucky")}}</label
-                  >
-                  <input
-                    readonly
-                    type="email"
-                    class="w-full input-bvxi30l9g"
-                    v-model="codeRefLucky"
-                  />
-                </div>
+                
                 <div>
                   <vs-button
                     color="#389a11"
@@ -1458,6 +1435,7 @@ export default {
       emailResend: "",
       emailForgot: "",
       emailReg: "",
+      phoneReg:"",
       emailReset: "",
       email: "",
       email3rd: "",
@@ -1476,6 +1454,7 @@ export default {
       error: null,
       domain: "",
       msgEmReg: "",
+      msgPhoneReg:"",
       msgPassReg: "",
       msgPass3rd: "",
       msgNickName: "",
@@ -1496,6 +1475,25 @@ export default {
       config,
       isEmail:true,
       isPhone:false,
+      regAccountMode:"Phone",
+      vueTel:{
+        dropdownOptions:{
+          showSearchBox:true,
+          showDialCodeInSelection:true,
+          showFlags:true,
+          showDialCodeInList:true,
+        },
+        autoFormat:false,
+        invalidMsg:"",
+      },
+      selectCountry:null,
+      selectCountryReg:{
+        dialCode: "",
+        iso2:"",
+        country:"",
+      },
+      validPhoneReg:false,
+      validReg:false,
     };
   },
   computed: {
@@ -1563,6 +1561,13 @@ export default {
     },
   },
   methods: {
+    phoneRegValidate(valid){
+      this.validPhoneReg = valid.valid;
+    },
+    countryRegChanged(country){
+      this.selectCountryReg = country;
+    },
+
     async pasteCode(){
       this.G2FACodeEnter = await navigator.clipboard.readText();
     },
@@ -1719,11 +1724,29 @@ export default {
     },
 
     submitFormReg() {
-      if (this.emailReg === "" || !this.checkReg(this.emailReg)) {
-        this.msgEmReg = "Địa chỉ email không hợp lệ. Vui lòng thử lại.";
-        return;
-      } else {
-        this.msgEmReg = "";
+      this.msgEmReg = "";
+      this.msgPhoneReg = "";
+      this.msgPassReg = "";
+      this.msgNickName = "";
+
+      let validReg = true;
+
+      if(this.regAccountMode =="Email"){
+        if (this.emailReg === "" || !this.checkReg(this.emailReg)) {
+
+          this.msgEmReg = this.$t('Register_EmailErr');
+          validReg = false;
+        } else {
+          this.msgEmReg = "";
+        }
+      }else if(this.regAccountMode =="Phone"){
+        if (!this.validPhoneReg) {
+         
+          this.msgPhoneReg = this.$t('Register_EmailErr');
+         validReg = false;
+        } else {
+          this.msgPhoneReg = "";
+        }
       }
 
       if (
@@ -1731,8 +1754,8 @@ export default {
         this.passwordReg.length < 6 ||
         this.passwordReg.length > 20
       ) {
-        this.msgPassReg = "Mật khẩu của bạn ít nhất phải 6 đến 20 ký tự.";
-        return;
+        this.msgPassReg = this.$t('Register_PassErr');
+       validReg = false;
       } else {
         this.msgPassReg = "";
       }
@@ -1745,11 +1768,14 @@ export default {
         this.nickName.length > 20 ||
         !regex.test(this.nickName)
       ) {
-        this.msgNickName =
-          "Biệt danh phải từ 6 đến 20 ký tự, bắt đầu bằng chữ và không chứa ký tự đặc biệt.";
-        return;
+          this.msgNickName = this.$t('Register_NicknameErr');
+          validReg = false;
       } else {
         this.msgNickName = "";
+      }
+
+      if(!validReg){
+        return;
       }
 
       let isActive = true;
@@ -1757,41 +1783,54 @@ export default {
       if (isActive) {
         this.ldFrom = true;
 
+        let isPhone = false;
+        let account = this.emailReg;
+
+        if(this.regAccountMode == "Phone"){
+            isPhone = true;
+            account = this.phoneReg;
+        }
+
         let obj = {
-          email: this.emailReg,
+          email: account,
           password: this.passwordReg,
           nick_name: this.nickName,
           upline_id: this.codeRef,
-          gt: this.codeRefLucky
+          gt: this.codeRefLucky,
+          isPhone: isPhone,
+          dialCode:this.selectCountryReg.dialCode,
+          iso2: this.selectCountryReg.iso2,
+          country: this.selectCountryReg.country,
+          isOpt:true
         };
-
-        //
 
         AuthenticationService.registerUser(obj).then((res) => {
           this.ldFrom = false;
           if (res.data.success == 1) {
-            this.isSubmitReg = true;
-            setTimeout(() => {
-              this.countDownResendMail();
-            }, 500);
-
+            // this.isSubmitReg = true;
+          
             this.$vs.notify({
-              title: "Đăng ký thành công",
-              text: "Chúng tôi đã gửi 1 một liên kết kích hoạt đến tài khoản của bạn.",
+              title: this.$t('Register_Success'),
+              text: this.$t('Register_SuccessNotify'),
               iconPack: "feather",
               icon: "icon-check",
               color: "success",
             });
+
+            setTimeout(() => {
+              this.$router.push("/login").catch(() => {});
+            }, 500);
+
           } else if (res.data.success == 2) {
             this.$vs.notify({
-              text: "Email này đã tồn tại",
+              text: this.$t('Register_EmailNotify'),
               iconPack: "feather",
               icon: "icon-alert-circle",
               color: "warning",
             });
           } else if (res.data.success == 3) {
             this.$vs.notify({
-              text: "Biệt danh này đã tồn tại",
+              text: this.$t('Register_NicknameNotify'),
               iconPack: "feather",
               icon: "icon-alert-circle",
               color: "warning",
@@ -2484,9 +2523,7 @@ export default {
 
 .formWapper .md-error {
   display: block !important;
-  opacity: 0;
-  transform: translate3d(0, -8px, 0);
-  left: 7px;
+  transform: unset;
   font-style: italic;
 }
 
@@ -2496,8 +2533,9 @@ export default {
 }
 
 .md-error {
-  top: 100%;
-  max-width: 335px;
+  width: 100%;
+  position: unset;
+  margin-top: 5px;
 }
 
 .viewPass {
