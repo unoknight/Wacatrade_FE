@@ -1,0 +1,319 @@
+/**
+ * This injects Tailwind's base styles, which is a combination of
+ * Normalize.css and some additional base styles.
+ *
+ * You can see the styles here:
+ * https://github.com/tailwindcss/tailwindcss/blob/master/css/preflight.css
+ *
+ * If using `postcss-import`, you should import this line from it's own file:
+ *
+ * @import "./tailwind-preflight.css";
+ *
+ * See: https://github.com/tailwindcss/tailwindcss/issues/53#issuecomment-341413622
+ */
+/*NOTE: 'preflight' IS RENAMED TO 'base'*/
+/*@tailwind base;*/
+
+/**
+ * Here you would add any of your custom component classes; stuff that you'd
+ * want loaded *before* the utilities so that the utilities could still
+ * override them.
+ *
+ * Example:
+ *
+ * .btn { ... }
+ * .form-input { ... }
+ *
+ * Or if using a preprocessor or `postcss-import`:
+ *
+ * @import "components/buttons";
+ * @import "components/forms";
+ */
+@tailwind components;
+
+/**
+ * This injects all of Tailwind's utility classes, generated based on your
+ * config file.
+ *
+ * If using `postcss-import`, you should import this line from it's own file:
+ *
+ * @import "./tailwind-utilities.css";
+ *
+ * See: https://github.com/tailwindcss/tailwindcss/issues/53#issuecomment-341413622
+ */
+@tailwind utilities;
+
+/**
+ * Here you would add any custom utilities you need that don't come out of the
+ * box with Tailwind.
+ *
+ * Example :
+ *
+ * .bg-pattern-graph-paper { ... }
+ * .skew-45 { ... }
+ *
+ * Or if using a preprocessor or `postcss-import`:
+ *
+ * @import "utilities/background-patterns";
+ * @import "utilities/skew-transforms";
+ */
+
+FE0002 .back-dark {
+   background: #1f2f43;
+}
+
+.affiliatePage {
+   margin-top: -10px;
+}
+
+.affiliatePage .con-vs-tabs {
+   padding: 0px 15px;
+}
+
+.affiliatePage .bg-dard {
+   background: #1f2f43;
+}
+
+.affiliatePage .vs-tabs--content {
+   padding: 3px !important;
+}
+
+.affiliatePage .con-vs-tabs button {
+   padding: 12px 16px;
+}
+
+.affiliatePage .con-vs-tabs button span {
+   font-weight: normal;
+}
+
+.colorWhite {
+   color: #fff !important;
+}
+
+.colorWhite1{
+   color: hsla(0,0%,100%,.5)!important;
+}
+
+.activeChild button.vs-tabs--btn span {
+   color: #389a11 !important;
+   font-weight: bold;
+}
+
+.affiliateInfo input {
+   background: transparent !important;
+   color: #fff !important;
+   border-right: 0px !important;
+}
+
+.affiliateInfo button {
+   margin-left: -2px;
+}
+
+.affiliateAnalize .con-vs-tabs {
+   border-bottom: 1px solid #389a11;
+}
+
+.affiliateAnalize .line-vs-tabs {
+   top: 44px !important;
+}
+
+.affiliatePage .referralSponsor {
+   display: -webkit-box;
+   display: -ms-flexbox;
+   display: flex;
+   gap: 10px;
+   margin-top: 16px;
+}
+
+#wallet .tab-border {
+   background: #02142b !important;
+   margin-top: -17px;
+}
+
+#wallet .con-vs-tabs button {
+   padding: 12px 16px;
+   font-weight: normal;
+}
+
+#wallet .vs-tabs--content {
+   padding: 2px !important;
+}
+
+#copy-trade {
+   padding: 0px !important;
+   margin-top: -10px;
+}
+
+#copy-trade .con-ul-tabs {
+   margin-top: 10px;
+   margin-right: 10px;
+}
+
+.ul-tabs-fixed li{
+   background: #1f2f43 !important;
+    border-radius: 5px;
+    margin-left: 10px;
+}
+
+#copy-trade .con-ul-tabs button {
+   padding-top: 12px !important;
+   padding-bottom: 16px !important;
+}
+
+#copy-trade .line-vs-tabs {
+   top: 40px !important;
+}
+
+.panel {
+   border-radius: 5px !important;
+   border: 1px solid;
+   background: #02142b !important;
+   border-color: #1d2d50;
+}
+
+.panel-header {
+   background: transparent !important;
+   border-color: hsla(0, 0%, 100%, .1) !important;
+
+   border-bottom: 1px solid #4d4e4e;
+   padding: 0.75rem 1.75rem;
+   padding-top: 1rem;
+   padding-bottom: 1rem;
+}
+
+.panel-header h3 {
+   font-size: 1.125rem !important;
+   margin: 0;
+}
+
+.panel-body{
+   padding: 0.75rem 1.75rem;
+}
+
+.button-rouner{
+   border-radius: 5px !important;
+}
+
+.vs-input--label{
+   font-size: 1rem !important;
+   margin-bottom: 0.25rem;
+}
+
+input[type="text"]:disabled{
+   border: 1px solid #eee !important;
+   color: #eee;
+}
+
+.flex-fill{
+   -webkit-box-flex: 1!important;
+    -ms-flex: 1 1 auto!important;
+}
+
+.info-switch .vs-switch{
+   background: #bababa !important;
+   border-radius: 5px;
+   padding: 5px 10px;
+}
+
+.info-switch .vs-switch--text.text-off{
+   color: white !important;
+}
+
+.h-header-custom img{
+   width: 100px !important;
+}
+
+.flex-container{
+   display: flex;
+  flex-direction: row;
+}
+
+@media (max-width: 800px) {
+   .flex-container {
+     flex-direction: column;
+   }
+
+   .hidden-sm{
+      display: none;
+   }
+ }
+
+ .fullscreen .vs-popup--content{
+   height:100% !important;
+   position: relative;
+ }
+
+ .setting .setting-mobile-logout{
+   position: absolute;
+   left:0px;
+   bottom: 30px;
+   padding: 1rem 1rem 0px 1rem;
+   color:white
+ }
+
+ .setting .setting-mobile-logout .textLink{
+   color:white !important;
+   font-weight: bold;
+ } 
+
+ .msetting .vs-con-dropdown{
+   cursor: pointer !important;
+ }
+
+ .i18n-dropdown{
+   z-index: 9999999999999 !important;
+ }
+
+ .line-language-pc button{
+   border: 1px solid #eee;
+    padding: 8px 12px;
+    border-radius: 5px;
+    width: 120px;
+    text-align: center;
+ }
+
+ .vs-con-input .vs-inputx{
+   border:1px solid rgba(255, 255, 255, 0.3) !important;
+ }
+
+ .button-vefiry{
+   min-width: 80px !important;
+ }
+
+ .line-language-pc button .i18n-locale span{
+   display: block !important;
+ }
+
+ .sidebar_tab .ul-tabs-fixed li{
+   background: transparent !important;
+ }
+
+.vs-dialog-header {
+   padding: 4px !important;
+}
+
+.vuesax-app-is-ltr .con-vs-dialog .vs-dialog header .vs-dialog-cancel{
+   transform:none !important;
+   -webkit-transform: none !important;
+}
+
+.halo-tree .node-title span{
+   color: #222 !important;
+}
+
+.position-relative{
+   position: relative !important;
+}
+
+.position-absolute{
+   position: absolute !important;
+}
+
+.block-mobile-title{
+   color: #838fae!important;
+   line-height: 1.6;
+   margin-bottom: 5px;
+   font-size: 12px;
+   width: 100%;
+   display: block;
+}
