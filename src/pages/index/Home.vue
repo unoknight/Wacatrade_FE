@@ -224,8 +224,7 @@
         </div>
       </div>
     </section>
-    <log-reg-for-get v-if="isEmail" />
-    <log-reg-for-get-sdt v-if="isPhone" />
+    <log-reg-for-get />
   </div>
 </template>
 
