@@ -213,19 +213,21 @@
         <div class="items-end lg:flex">
           <div class="relative flex flex-col lg:mr-3">
             <div class="dateRange">
-              <datepicker
-                class="customeTradeHistory startDate"
-                :format="formatDate"
-                :disabled="true"
-                :value="startDate"
-              ></datepicker>
+              <div class="mr-4">
+                <small class="date-label">Từ ngày</small>
+                <datepicker class="customeTradeHistory"
+                  v-model="startDate"
+                  :format="formatDate"
+                ></datepicker>
+              </div>
               <span class="seperate">-</span>
-              <datepicker
-                class="customeTradeHistory endDate"
-                :format="formatDate"
-                :disabled="true"
-                :value="endDate"
-              ></datepicker>
+              <div class="mr-4"> 
+                <small class="date-label">Đến ngày</small>
+                <datepicker class="customeTradeHistory"
+                  v-model="endDate"
+                  :format="formatDate"
+                ></datepicker>
+              </div>
             </div>
           </div>
           <vs-button
@@ -233,6 +235,7 @@
             style="padding: 9px 24px !important; border-radius: 6px"
             type="filled"
             @click="getSeachOrderDate()"
+            :disabled="startDate > endDate"
             >{{ $t('History_Search') || "Search" }}</vs-button
           >
         </div>
@@ -355,6 +358,7 @@ import moment from "moment";
 
 Highcharts3D(Highcharts);
 More(Highcharts);
+
 
 const chartDount = {
   chart: {
@@ -519,8 +523,8 @@ export default {
       win_rate: 0,
 
       formatDate: "MM/dd/yyyy",
-      startDate: null,
-      endDate: null,
+      startDate: "",
+      endDate: "",
       optionsDount: chartDount,
       chartPie,
       totalOrder: 0,
@@ -599,10 +603,8 @@ export default {
 
     getSeachOrderDate() {
       this.isLoading = true;
-
-      let start = this.formatDateHis(this.startDate);
-      let end = this.formatDateHis(this.endDate);
-
+      let start = moment(this.startDate).format("YYYY-MM-DD");
+      let end = moment(this.endDate).format("YYYY-MM-DD");
       let obj = {
         s: start,
         e: end,
