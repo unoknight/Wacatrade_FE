@@ -39,6 +39,12 @@ export default [
         slug: "admin-analytics",
         i18n: "Analytics",
       },
+      {
+        url: '/dashboard',
+        name: "Thống kê users",
+        slug: "admin-users",
+        // i18n: "Users",
+      },
       // {
       //   url: '/ecommerce',
       //   name: "eCommerce",

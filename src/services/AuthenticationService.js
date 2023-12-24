@@ -356,10 +356,6 @@ export default {
         return ApiAdmin().post('api/setup/saveRateCommission', obj)
     },
 
-    saveRateCommission(obj) {
-        return ApiAdmin().post('api/setup/saveRateCommission', obj)
-    },
-
     getStakingRate() {
         return ApiAdmin().get('api/staking/set-rate')
     },
@@ -467,6 +463,9 @@ export default {
 
     getAnalytics() {
         return ApiAdmin().get('api/users/analytics')
+    },
+    getAnalizeByDay() {
+        return ApiAdmin().get('api/users/get-analyze-by-day')
     },
 
     //================
