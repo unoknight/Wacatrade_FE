@@ -63,6 +63,14 @@ const router = new Router({
                         rule: 'admin'
                     }
                 },
+                {
+                    path: '/dashboard',
+                    name: 'admin-users',
+                    component: () => import('./views/DashboardUsers.vue'),
+                    meta: {
+                        rule: 'admin'
+                    }
+                },
 
                 // Route Account
 
