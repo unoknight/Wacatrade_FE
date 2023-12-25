@@ -485,8 +485,8 @@ export default {
     //================
     //================
 
-    getBetsListHistory() {
-        return ApiAdmin().get('api/bets/historyBet')
+    getBetsListHistory(page, maxItems) {
+        return ApiAdmin().get(`api/bets/historyBet?page=${page}&maxItems=${maxItems}`)
     },
 
     //Đại lý
