@@ -21,7 +21,7 @@
 
     <div id="loading-corners" class="vs-con-loading__container">
 
-      <vs-table ref="table" multiple v-model="selectedUser" pagination :max-items="itemsPerPage" search :data="products">
+      <vs-table ref="table" multiple v-model="selectedUser" search :data="products">
 
         <div slot="header" class="flex flex-wrap-reverse items-center justify-between flex-grow">
 
@@ -37,23 +37,21 @@
           <vs-dropdown vs-trigger-click class="mb-4 mr-4 cursor-pointer items-per-page-handler">
             <div
               class="flex items-center justify-between p-4 font-medium border border-solid rounded-full cursor-pointer d-theme-border-grey-light d-theme-dark-bg">
-              <span class="mr-2">{{ currentPage * itemsPerPage - (itemsPerPage - 1) }} - {{ products.length - currentPage
-                * itemsPerPage > 0 ? currentPage * itemsPerPage : products.length }} of {{ queriedItems }}</span>
               <feather-icon icon="ChevronDownIcon" svgClasses="h-4 w-4" />
             </div>
             <!-- <vs-button class="btn-drop" type="line" color="primary" icon-pack="feather" icon="icon-chevron-down"></vs-button> -->
             <vs-dropdown-menu>
 
-              <vs-dropdown-item @click="itemsPerPage = 4">
+              <vs-dropdown-item @click="selectItemsPerPage(4)">
                 <span>4</span>
               </vs-dropdown-item>
-              <vs-dropdown-item @click="itemsPerPage = 10">
+              <vs-dropdown-item @click="selectItemsPerPage(10)">
                 <span>10</span>
               </vs-dropdown-item>
-              <vs-dropdown-item @click="itemsPerPage = 15">
+              <vs-dropdown-item @click="selectItemsPerPage(15)">
                 <span>15</span>
               </vs-dropdown-item>
-              <vs-dropdown-item @click="itemsPerPage = 20">
+              <vs-dropdown-item @click="selectItemsPerPage(20)">
                 <span>20</span>
               </vs-dropdown-item>
             </vs-dropdown-menu>
@@ -126,6 +124,20 @@
                 <p class="de-create">{{ tr.created_at }}</p>
               </vs-td>
             </vs-tr>
+            <vs-pagination
+              v-model="currentPage"
+              :total="totalPages"
+              :per-page="itemsPerPage"
+              @change="handlePageChange"
+              style="width: auto !important; display: inline-block !important;"
+            >
+              <template #prev="{ text }">
+                <span style="white-space: nowrap !important; overflow: hidden !important; text-overflow: ellipsis !important;">{{ text }}</span>
+              </template>
+              <template #next="{ text }">
+                <span style="white-space: nowrap !important; overflow: hidden !important; text-overflow: ellipsis !important;">{{ text }}</span>
+              </template>
+            </vs-pagination>
           </tbody>
         </template>
       </vs-table>
@@ -141,7 +153,6 @@
 
 import vSelect from 'vue-select'
 import AuthenticationService from '@/services/AuthenticationService'
-import moment from 'moment'
 import Vue from 'vue'
 
 export default {
@@ -177,16 +188,12 @@ export default {
       ],
       itemsPerPage: 10,
       isMounted: false,
-      accountType:0
+      accountType:0,
+      totalPages: 100,
+      currentPage: 1
     }
   },
   computed: {
-    currentPage() {
-      if (this.isMounted) {
-        return this.$refs.table.currentx
-      }
-      return 0
-    },
     products() {
       return this.productsFake
     },
@@ -195,12 +202,20 @@ export default {
     }
   },
   methods: {
-
+    handlePageChange(newPage) {
+      this.currentPage = newPage;
+      this.reloadList()
+    },
+    selectItemsPerPage(value) {
+      this.currentPage = parseInt((this.currentPage * this.itemsPerPage + 1 - value)/value);
+      this.itemsPerPage = value;
+      this.reloadList()
+    },
     async deleteMultiple() {
       const check = await this.$store.dispatch("check2fa");
       if (!check) {
         return;
-      };
+      }
       let token = localStorage.getItem('token')
       this.$store.dispatch('setToken', token)
 
@@ -240,7 +255,7 @@ export default {
       const check = await this.$store.dispatch("check2fa");
       if (!check) {
         return;
-      };
+      }
 
       let token = localStorage.getItem('token')
       this.$store.dispatch('setToken', token)
@@ -389,18 +404,22 @@ export default {
       this.showDeleteMultiBt = true
       let token = localStorage.getItem('token')
       this.$store.dispatch('setToken', token)
+      this.openLoadingInDiv();
 
-      AuthenticationService.getBetsListHistory()
+      AuthenticationService.getBetsListHistory(this.currentPage || 1, this.itemsPerPage || 20)
         .then((resp) => {
-
           this.$vs.loading.close('#loading-corners > .con-vs-loading');
 
           if (!resp.data.success) {
             localStorage.removeItem('token');
             this.$router.push('/pages/login').catch(() => { })
           } else {
-            this.productsFake = resp.data.data;
+            this.productsFake = resp.data.data.data;
+            this.totalPages = parseInt(resp.data.data.total) / parseInt(this.itemsPerPage) + 1;
           }
+        })
+        .finally(() => {
+          this.$vs.loading.close('#loading-corners > .con-vs-loading');
         })
     },
 
@@ -553,7 +572,19 @@ export default {
         box-shadow: none;
       }
     }
+    .vs-pagination--ul {
+      width: 100%;
+    }
 
+    .vs-pagination--li {
+      flex-grow: 1;
+    }
+    
+    .vs-pagination--ul li {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
     .vs-table--pagination {
       justify-content: center;
     }
