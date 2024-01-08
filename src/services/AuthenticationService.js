@@ -386,6 +386,10 @@ export default {
         return ApiAdmin().get('api/trades/totalAddMoney');
     },
 
+    getStatisticTrade() {
+        return ApiAdmin().get('api/trades/getStatisticTrade');
+    },
+
     getTradeListHistory(params) {
         return ApiAdmin().get('api/trades/historyAll', { params });
     },

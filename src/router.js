@@ -56,6 +56,14 @@ const router = new Router({
                     }
                 },
                 {
+                    path: '/statisticTrade',
+                    name: 'admin-statisticTrade',
+                    component: () => import('./views/DashboardStatisticTrade.vue'),
+                    meta: {
+                        rule: 'admin',
+                    }
+                },
+                {
                     path: '/ecommerce',
                     name: 'admin-ecommerce',
                     component: () => import('./views/DashboardECommerce.vue'),

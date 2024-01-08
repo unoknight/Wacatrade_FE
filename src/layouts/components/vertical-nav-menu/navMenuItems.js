@@ -39,6 +39,12 @@ export default [
         slug: "admin-analytics",
         i18n: "Analytics",
       },
+      {
+        url: '/statisticTrade',
+        name: "statisticTrade",
+        slug: "admin-analytics",
+        i18n: "Thống kê cuối ngày",
+      },
       // {
       //   url: '/ecommerce',
       //   name: "eCommerce",
